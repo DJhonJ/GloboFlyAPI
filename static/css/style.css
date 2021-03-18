@@ -12,6 +12,10 @@ main {
     padding: 1rem 2rem;
 }
 
+section {
+    margin-bottom: 1rem;
+}
+
 h2.text-center {
     margin-bottom: 1rem;
 }
