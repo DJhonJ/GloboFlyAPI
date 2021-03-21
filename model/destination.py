@@ -14,7 +14,7 @@ class Destination():
 
     @property
     def country(self):
-        return self.__city
+        return self.__country
 
     @country.setter
     def country(self, country):

@@ -1,7 +1,10 @@
 from flask import Flask, jsonify, request, render_template, url_for
 from destinations import destinations
+from controller.destinationController import DestinationController
 
 app = Flask(__name__)
+
+__destinationController = DestinationController()
 
 @app.route('/')
 def index():
@@ -9,7 +12,8 @@ def index():
 
 @app.route('/destinations')
 def getDestinations():
-    return jsonify({ 'destinations': destinations })
+    destinos = __destinationController.getDestinations()
+    return jsonify({ 'destinations': destinos })
 
 @app.route('/destinations/<int:id>')
 def getDestination(id):
@@ -23,16 +27,10 @@ def getDestination(id):
 def addDestination():
     if request.json == None: 
         return jsonify({'message': 'Bad request'})
-    else:
-        new_destination = {
-            'city': request.json['city'],
-            'country': request.json['country'],
-            'description': request.json['description']
-        }
+    else:   
+        result = __destinationController.createDestination(request.json)
 
-        destinations.append(new_destination)
-
-        return jsonify({'message': 'ok'})
+        return jsonify({'message': result})
 
 @app.route('/destination/<int:id>', methods=['PUT'])
 def updateDestination(id):

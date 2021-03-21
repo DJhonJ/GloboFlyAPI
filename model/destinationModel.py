@@ -13,11 +13,13 @@ class DestinationModel():
         return self.__cursor.fetchall()
 
     def create(self, destination: destination.Destination):
-        query = 'insert into Destination (City, Country, Description, State) values (?,?,?,?)'
-        self.__cursor.executemany(query, (destination.city, 
-            destination.country, destination.description, 1))
+        query = '''insert into Destination (City, Country, Description, State) 
+            values (%s, %s, %s, %s)'''
+        data = (destination.city, destination.country, destination.description, 1)
 
+        print(data)
+
+        self.__cursor.execute(query, data)
         self.__connection.getConnection().commit()
 
         return "ok"
-        
