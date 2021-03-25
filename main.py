@@ -12,42 +12,34 @@ def index():
 
 @app.route('/destinations')
 def getDestinations():
-    destinos = __destinationController.getDestinations()
-    return jsonify({ 'destinations': destinos })
+    destinos = __destinationController.getDestinations(0)
+    return jsonify(destinos)
 
 @app.route('/destinations/<int:id>')
 def getDestination(id):
-    for destination in destinations:
-        if destination['id'] == id:
-            return destination
-        
-    return jsonify({ 'message': 'Producto no encontrado' })
+    return jsonify(__destinationController.getDestinations())
 
 @app.route('/destination', methods=['POST'])
 def addDestination():
     if request.json == None: 
         return jsonify({'message': 'Bad request'})
     else:   
-        result = __destinationController.createDestination(request.json)
+        response = __destinationController.createDestination(request.json)
 
-        return jsonify({'message': result})
+        return jsonify({'id': response, 'message': 'ok'})
 
 @app.route('/destination/<int:id>', methods=['PUT'])
 def updateDestination(id):
-    def validate(listDestination, key, valueRequest):
-        if key in valueRequest:
-            listDestination[key] = valueRequest[key]
-
-    for destination in destinations:
-        if destination["id"] == id:
-            validate(destination, "city", request.json)
-            validate(destination, "country", request.json)
-            validate(destination, "description", request.json)
-
-            return jsonify({"message": "update ok"})
-    
-    return jsonify({"message": "destination not found."}) 
-
+    if request.json == None: 
+        return jsonify({'message': 'Bad request'})
+    else:   
+        for item in __destinationController.getDestinations(0):
+            if item['id'] == id:
+                response = __destinationController.updateDestination(id, request.json)
+                return jsonify({ 'message': response })
+        
+        return jsonify({ 'message': 'destination not found.' })
+        
 @app.route('/destination/<int:id>', methods=['DELETE'])
 def deleteDestination(id):
     for destination in destinations:

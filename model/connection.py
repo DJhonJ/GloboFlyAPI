@@ -5,13 +5,13 @@ class Connection():
         self.__connection = None
 
     def connect(self):
-        if self.__connection == None:
-            self.__connection = mysql.connector.connect(
-                host="localhost",
-                user="root",
-                password="",
-                database="globofly"
-            )
+        self.__connection = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="",
+            database="globofly"
+        )
+            
 
     def getCursor(self):
         if self.__connection == None:
