@@ -7,9 +7,11 @@ class DestinationModel():
         self.__cursor =  self.__connection.getCursor()
 
     def destinations(self, id = 0):
+        print(id)
         self.__cursor.execute(f'''select Id, City, Country, Description, Status, 
             DATE_FORMAT(CreationDate, "%d/%m/%Y %H:%i:%s") as CreationDate 
-            from Destination where (IfNull({id}, 0) = 0 or {id} = Id) and Status = 1''')
+            from Destination 
+            where (IfNull({id}, 0) = 0 or {id} = Id) and Status = 1''')
 
         return self.__cursor.fetchall()
 
@@ -31,12 +33,22 @@ class DestinationModel():
                         Country = %s, Description = %s
                     where Id = {id}'''
         try:
-            self.__cursor.execute(query, (destination.city, destination.country, destination.description, 1))
+            self.__cursor.execute(query, (destination.city, destination.country, destination.description))
             self.__connection.getConnection().commit()
         except Exception as ex:
             return f"problemas actualizar - {ex}"
         else:
             return id
+
+
+    def delete(self, id):
+        try:
+            self.__cursor.execute(f'update Destination set Status = 0 where Id = {id}')
+            self.__connection.getConnection().commit()
+        except Exception as ex:
+            return f'Problemas al eliminar - {ex}'
+        else:
+            return "ok"
 
 
 

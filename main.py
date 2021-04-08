@@ -17,7 +17,7 @@ def getDestinations():
 
 @app.route('/destinations/<int:id>')
 def getDestination(id):
-    return jsonify(__destinationController.getDestinations())
+    return jsonify(__destinationController.getDestinations(id))
 
 @app.route('/destination', methods=['POST'])
 def addDestination():
@@ -40,14 +40,15 @@ def updateDestination(id):
         
         return jsonify({ 'message': 'destination not found.' })
         
-@app.route('/destination/<int:id>', methods=['DELETE'])
+@app.route('/destination/<id>', methods=['DELETE'])
 def deleteDestination(id):
-    for destination in destinations:
-        if id in destination.values():
-            destination.clear()
-            return jsonify({"message": "remove ok"})
-
-    return jsonify({"message": "destination not found."}) 
+    print(id)
+    for item in __destinationController.getDestinations(0):
+        if item["id"] == int(id):
+            respuesta = __destinationController.deleteDestination(id)
+            return jsonify({ 'message': respuesta })
+        
+    return jsonify({ 'message': 'destination not found.' })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

@@ -23,6 +23,9 @@ class DestinationController():
 
         return self.__model.update(id, destination.Destination(json['city'], 
             json['country'], json['description']))
+
+    def deleteDestination(self, id):
+        return self.__model.delete(id)
         
     def __validateKeys(self, json):
         for key in ['city', 'country', 'description']:
